@@ -37,6 +37,8 @@ $(document).ready(function () {
         }
     }
 
+    $('#message-textarea').on('keydown', new_message.bind(this));
+
     function activateSemantics() {
         $('.ui.dropdown').dropdown();
         $('.ui.checkbox').checkbox();
