@@ -85,8 +85,8 @@ def register_commands(app):
         db.create_all()
 
         click.echo('Forging the data...')
-        admin = User(nickname='Grey Li', email='admin@helloflask.com')
-        admin.set_password('helloflask')
+        admin = User(nickname='Tartaurs', email='tartarus@qq.com')
+        admin.set_password('tartarus')
         db.session.add(admin)
         db.session.commit()
 
