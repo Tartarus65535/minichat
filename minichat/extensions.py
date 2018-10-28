@@ -3,7 +3,9 @@ from flask_login import LoginManager
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from flask_socketio import SocketIO
 
+socketio = SocketIO()
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()

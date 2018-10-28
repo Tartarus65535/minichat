@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFError
 
 from minichat.blueprints.auth import auth_bp
 from minichat.blueprints.chat import chat_bp
-from minichat.extensions import db, login_manager, csrf, moment
+from minichat.extensions import db, login_manager, csrf, moment, socketio
 from minichat.models import User, Message
 from minichat.settings import config
 
@@ -32,7 +32,7 @@ def register_extensions(app):
     login_manager.init_app(app)
     csrf.init_app(app)
     moment.init_app(app)
-
+    socketio.init_app(app)
 
 def register_blueprints(app):
     app.register_blueprint(auth_bp)

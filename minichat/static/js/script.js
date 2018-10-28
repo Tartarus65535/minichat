@@ -1,5 +1,7 @@
 $(document).ready(function () {
+    var socket = io();
     var popupLoading = '<i class="notched circle loading icon green"></i> Loading...';
+    var ENTER_KEY = 13;
 
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
@@ -12,6 +14,27 @@ $(document).ready(function () {
     function scrollToBottom() {
         var $messages = $('.messages');
         $messages.scrollTop($messages[0].scrollHeight);
+    }
+
+    socket.on('user count', function (data) {
+        $('#user-count').html(data.count);
+    });
+
+    socket.on('new message', function (data) {
+        $('.messages').append(data.message_html);//插入新消息
+        flask_moment_render_all();//渲染时间戳
+        scrollToBottom();
+        activateSemantics();
+    });
+
+    function new_message(e) {
+        var $textarea = $('#message-textarea');
+        var message_body = $textarea.val().trim();//获取消息
+        if (e.which === ENTER_KEY && !e.shiftKey && message_body) {
+            e.preventDefault();//阻止换行
+            socket.emit('new message', message_body);//发送
+            $textarea.val('')//清空
+        }
     }
 
     function activateSemantics() {

@@ -35,3 +35,12 @@ def profile():
 def get_profile(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('chat/_profile_card.html', user=user)
+
+@socketio.on('new message')
+def new_message(message_body):
+    message= Message(author=current_user._get_current_object(),body=message_body)
+    db.session.add(message)
+    db.session.commit()
+    emit('new message',
+        {'mes s age html': render_template('chat/_message.html',message=message)}
+        broadcast=True )
