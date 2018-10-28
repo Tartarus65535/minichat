@@ -24,7 +24,6 @@ def profile():
     if form.validate_on_submit():
         current_user.nickname = form.nickname.data
         current_user.github = form.github.data
-        current_user.website = form.website.data
         current_user.bio = form.bio.data
         db.session.commit()
         return redirect(url_for('.home'))
