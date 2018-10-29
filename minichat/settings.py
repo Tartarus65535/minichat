@@ -13,6 +13,7 @@ else:
 
 
 class BaseConfig:
+    CHAT_MESSAGE_PER_PAGE = 30
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev key')
 
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))

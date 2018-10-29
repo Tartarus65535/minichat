@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, redirect, url_for, Blueprint
+from flask import render_template, redirect, url_for, Blueprint, current_app, request 
 from flask_login import current_user, login_required
 from flask_socketio import emit
 from minichat.extensions import db, socketio
@@ -12,10 +12,18 @@ online_users=[]
 
 @chat_bp.route('/')
 def home():
-    messages = Message.query.order_by(Message.timestamp.asc())
+    amount = current_app.config['CHAT_MESSAGE_PER_PAGE']
+    messages = Message.query.order_by(Message.timestamp.asc())[-amount:]
     user_amount = User.query.count()
     return render_template('chat/home.html', messages=messages, user_amount=user_amount)
 
+@chat_bp.route('/messages')
+def get_messages():
+    page = request.args.get('page', 1, type=int)
+    pagination = Message.query.order_by(Message.timestamp.desc()).paginate(
+        page, per_page=current_app.config['CHAT_MESSAGE_PER_PAGE'])
+    messages = pagination.items
+    return render_template('chat/_messages.html', messages=messages[::-1])
 
 @chat_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -58,3 +66,4 @@ def new_message(message_body):
     emit('new message',
          {'message_html': render_template('chat/_message.html', message=message)},
          broadcast=True)
+
